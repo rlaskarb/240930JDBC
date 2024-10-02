@@ -21,12 +21,12 @@ public class Application03 {
             prop.load(new FileReader("src/main/java/com/ohgiraffers/connection/jdbc-config.properties"));
             System.out.println("prop = " + prop);
 
-            String dirver= prop.getProperty("driver");
+            String driver= prop.getProperty("driver");
             String url =prop.getProperty("url");
             String user=prop.getProperty("user");
             String password=prop.getProperty("password");
 
-            Class.forName(dirver);
+            Class.forName(driver);
 
             con = DriverManager.getConnection(url,user,password);
 

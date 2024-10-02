@@ -48,8 +48,12 @@ public class Application1 {
             pstmt.setInt(2,menuPrice);
             pstmt.setInt(3,categoryCode);
             pstmt.setString(4,oderableStatus);
-            
-            result = pstmt.executeUpdate();
+
+            /*comment
+            * executeUpdate
+            * -데이터베이스 테이블에 변화가 생긴만큼
+            * -정수를 return 해준다.*/
+            result = pstmt.executeUpdate(); //executeUpdate 변경이 생긴 만큼 정수를 리턴해준다.
             
         } catch (IOException e) {
             throw new RuntimeException(e);
