@@ -1,11 +1,11 @@
-package com.ohgiraffers.section01.statement;
+package com.ohgiraffers.section02.preparedstatement;
 
 import com.ohgiraffers.mode.dto.EmployeeDTO;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -13,33 +13,38 @@ import java.util.Scanner;
 import static com.ohgiraffers.common.JdbcTemplate.close;
 import static com.ohgiraffers.common.JdbcTemplate.getConnection;
 
-public class Appilcat4 {
+public class Application4 {
     public static void main(String[] args) {
-
-        /*title 전체 사원 정보를 EmployeeDTO 를 통해 객체에 담아서 출력*/
-
-
+        /*index 1 EMPLOYEE 테이블에서 조회할 사원의 성씨를 입력받아
+        * 해당하는 성을 가지고 있는 사원의 정보를 모두 출력
+        * */
         Connection con = getConnection();
 
-        Statement stmt = null;
+        PreparedStatement pstmt = null;
 
         ResultSet rset = null;
 
-        // 회원 한명의 정보를 담을 DTO
         EmployeeDTO emp = null;
-        // 한명의 정보들을 하나의 인스턴스로 묶기위한 List
-        List<EmployeeDTO> empList = null;
+
+        List<EmployeeDTO> empList = new ArrayList<>();
 
 
-        String query = "SELECT * FROM EMPLOYEE ";
+        Scanner sc = new Scanner(System.in);
+        System.out.print(" 이름의 성을 입력 하세요");
+        String emp_Name = sc.nextLine();
+
+        String query = "SELECT * FROM EMPLOYEE WHERE EMP_NAME LIKE CONCAT(?,'%')";
+
+
 
         try {
-            stmt = con.createStatement();
-            rset = stmt.executeQuery(query);
-            empList = new ArrayList<>();
+            pstmt = con.prepareStatement(query);
+            
+            pstmt.setString(1,emp_Name);
 
-            /*조회한 결과를 객체에 담기 */
-            while (rset.next()) {
+
+            rset = pstmt.executeQuery();
+            while(rset.next()){
                 emp = new EmployeeDTO();
 
                 emp.setEmpId(rset.getString("EMP_ID"));
@@ -57,24 +62,21 @@ public class Appilcat4 {
                 emp.setEntDate(rset.getDate("ENT_DATE"));
                 emp.setEntYn(rset.getString("ENT_YN"));
 
-              empList.add(emp);
-
+                empList.add(emp);
             }
+            
+            
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }finally {
+            close(rset);
+            close(pstmt);
+            close(con);
+        }
 
-            } catch(SQLException e){
-                throw new RuntimeException(e);
-            }finally{
-                close(con);
-                close(rset);
-                close(stmt);
-
-            }
-        for(EmployeeDTO oneEmployee : empList){
-            System.out.println("oneEmployee = " + oneEmployee);
+        for(EmployeeDTO e : empList){
+            System.out.println("emp = " + e );
         }
 
     }
 }
-
-
-
