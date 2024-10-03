@@ -55,7 +55,7 @@ public class JdbcTemplate {
     public static void colse(ResultSet rset) {
         try {
             if (rset != null & !rset.isClosed()) {
-                rest.close();
+                rset.close();
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
