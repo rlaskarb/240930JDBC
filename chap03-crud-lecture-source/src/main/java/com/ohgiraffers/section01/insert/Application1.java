@@ -39,6 +39,7 @@ public class Application1 {
             System.out.print("신규메뉴의 카테고리 코드를 입력하세요");
             int categoryCode = sc.nextInt();
             System.out.println();
+            System.out.println();
             System.out.print("판매여부 지정하세요(Y/N) :");
             sc.nextLine();
             String oderableStatus =sc.nextLine().toUpperCase();
